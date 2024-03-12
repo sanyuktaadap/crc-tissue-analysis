@@ -12,8 +12,8 @@ Using Colorectal Cancer Histology images to estimate tumor-stroma ratio by ident
 (a) tumour epithelium,
 (b) simple stroma,
 (c) complex stroma
-(d) immune cell conglomerates,
+(d) immune cells,
 (e) debris and mucus,
 (f) mucosal glands,
-(g) adipose tissue,s
+(g) adipose tissue,
 (h) background
