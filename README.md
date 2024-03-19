@@ -17,3 +17,7 @@ Using Colorectal Cancer Histology images to estimate tumor-stroma ratio by ident
 (f) mucosal glands,
 (g) adipose tissue,
 (h) background
+
+Reference papers:
+1. https://www.nature.com/articles/s41598-019-50587-1
+2.
