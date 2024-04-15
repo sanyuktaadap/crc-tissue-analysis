@@ -2,7 +2,7 @@ import torch.nn as nn
 import torch.nn.functional as F
 import torch.hub as hub
 
-class CRCTextureClassifier(nn.Module):
+class CRCTissueClassifier(nn.Module):
     def __init__(self, n_classes=8,  dropout=0.2):
         super().__init__()
 
@@ -10,9 +10,9 @@ class CRCTextureClassifier(nn.Module):
         self.dropout = dropout
 
         # Load AlexNet from Torch
-        alexenet = hub.load('pytorch/vision:v0.10.0', 'alexnet', pretrained=False)
+        alexnet = hub.load('pytorch/vision:v0.10.0', 'alexnet', pretrained=False)
         self.feature_extractor = nn.Sequential(
-            alexenet.features,
+            alexnet.features,
             nn.AdaptiveAvgPool2d(output_size=(6, 6))
         )
         self.fc_block = nn.Sequential(

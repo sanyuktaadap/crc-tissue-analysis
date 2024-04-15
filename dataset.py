@@ -2,8 +2,9 @@ import glob
 import os
 from PIL import Image
 from torch.utils.data import Dataset
+from sklearn.decomposition import NMF
 
-class CRCHistoDataset(Dataset):
+class CRCTissueDataset(Dataset):
     def __init__(
         self,
         imgs_path,
