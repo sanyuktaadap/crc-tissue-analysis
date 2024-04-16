@@ -1,7 +1,9 @@
 import os
 import torch
-from torch.utils.data import DataLoader
 import staintools
+
+# Torch Imports
+from torch.utils.data import DataLoader
 import torch.nn as nn
 import torch.optim as optim
 from torchvision.transforms import v2
@@ -28,9 +30,10 @@ lmbda = 1e-5
 batch_size = 16
 n_epochs = 40
 
+# Normalizer
 normalizer = staintools.StainNormalizer(method='vahadane')
 
-# Load Train data
+# Trainset augmentation
 train_transforms = v2.Compose([
     v2.ToImage(),
     v2.Resize(size=IMG_SIZE),
@@ -41,6 +44,7 @@ train_transforms = v2.Compose([
     v2.ToDtype(torch.float, scale=True),
 ])
 
+# Load train data
 train_dataset = CRCTissueDataset(
     imgs_path=TRAIN_IMG_PATH,
     normalizer=normalizer,
@@ -51,13 +55,13 @@ train_dataloader = DataLoader(train_dataset,
                               shuffle=True,
                               num_workers=2)
 
-# Load Val data
+# Validation set augmentation
 val_transforms = v2.Compose([
     v2.ToImage(),
     v2.Resize(size=IMG_SIZE),
     v2.ToDtype(torch.float, scale=True),
 ])
-
+# Load validation data
 val_dataset = CRCTissueDataset(
     imgs_path=VAL_IMG_PATH,
     normalizer=normalizer,
@@ -68,10 +72,13 @@ val_dataloader = DataLoader(val_dataset,
                             shuffle=True,
                             num_workers=2)
 
+# Other hyperparameters
 device = torch.device('cuda') if torch.cuda.is_available() else torch.device('cpu')
 model = CRCTissueClassifier()
 loss_fn = nn.CrossEntropyLoss()
-opt = optim.Adam(model.parameters(), lr=lr, weight_decay=lmbda)
+opt = optim.SGD(model.parameters(), lr=lr, weight_decay=lmbda)
+
+# Logging
 train_logger = SummaryWriter(log_dir=os.path.join(LOG_PATH, "train"))
 val_logger = SummaryWriter(log_dir=os.path.join(LOG_PATH, "val"))
 

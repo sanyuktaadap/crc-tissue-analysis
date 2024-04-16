@@ -2,17 +2,18 @@ from tqdm import tqdm
 import torch
 from metrics import get_metrics
 import numpy as np
-import staintools
 
 def normalize_image(ref_img, tar_img, normalizer):
+    # Convert image to RGB uint8
     tar_img = tar_img.convert("RGB")
     ref_img = ref_img.convert("RGB")
     tar_img = np.array(tar_img)
     ref_img = np.array(ref_img)
     tar_img = tar_img.astype(np.uint8)
     ref_img = ref_img.astype(np.uint8)
-
+    # Fit the normalizer on reference image
     normalizer.fit(ref_img)
+    # Normalize the target image
     tar_img = normalizer.transform(tar_img)
 
     return tar_img

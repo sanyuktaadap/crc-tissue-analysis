@@ -30,9 +30,14 @@ class CRCTissueDataset(Dataset):
             transforms (torchvision.transforms): Transforms to be run on an image
             class_map (dict, optional): Provides the mapping from the name to the number
         """
-        # Path to training data
+        # Path to dataset
         self.imgs_path = imgs_path
+        # Classes dictionary
         self.class_map = class_map
+        # Stain color normalization method
+        self.normalizer = normalizer
+        # Path to reference image for normalization
+        self.norm_reference_path = norm_reference_path
         self.transforms = transforms
         # List containing paths to all the images
         self.data = []
