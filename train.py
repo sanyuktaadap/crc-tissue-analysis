@@ -1,6 +1,7 @@
 import os
 import torch
 from torch.utils.data import DataLoader
+import staintools
 import torch.nn as nn
 import torch.optim as optim
 from torchvision.transforms import v2
@@ -17,14 +18,17 @@ TRAIN_IMG_PATH = "./data-split/train"
 VAL_IMG_PATH = "./data-split/val"
 CKPT_PATH = os.path.join("./checkpoints/", RUN_ID)
 LOG_PATH = os.path.join("./logs", RUN_ID)
-IMG_SIZE = (256, 256)
-N_CLASSES = 4
+IMG_SIZE = (227, 227)
+N_CLASSES = 8
+REF_IMG_PATH = "./data-split/train/06_MUCOSA/1A62_CRC-Prim-HE-05.tif_Row_1201_Col_1501.tif"
 
 # Hyperparams
 lr = 1e-4
 lmbda = 1e-5
 batch_size = 16
 n_epochs = 40
+
+normalizer = staintools.StainNormalizer(method='vahadane')
 
 # Load Train data
 train_transforms = v2.Compose([
@@ -37,7 +41,11 @@ train_transforms = v2.Compose([
     v2.ToDtype(torch.float, scale=True),
 ])
 
-train_dataset = CRCTissueDataset(imgs_path=TRAIN_IMG_PATH, transforms=train_transforms)
+train_dataset = CRCTissueDataset(
+    imgs_path=TRAIN_IMG_PATH,
+    normalizer=normalizer,
+    norm_reference_path=REF_IMG_PATH,
+    transforms=train_transforms)
 train_dataloader = DataLoader(train_dataset,
                               batch_size=batch_size,
                               shuffle=True,
@@ -50,7 +58,11 @@ val_transforms = v2.Compose([
     v2.ToDtype(torch.float, scale=True),
 ])
 
-val_dataset = CRCTissueDataset(imgs_path=VAL_IMG_PATH, transforms=val_transforms)
+val_dataset = CRCTissueDataset(
+    imgs_path=VAL_IMG_PATH,
+    normalizer=normalizer,
+    norm_reference_path=REF_IMG_PATH,
+    transforms=val_transforms)
 val_dataloader = DataLoader(val_dataset,
                             batch_size=batch_size,
                             shuffle=True,
