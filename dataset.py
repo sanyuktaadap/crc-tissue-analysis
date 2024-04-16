@@ -1,13 +1,17 @@
 import glob
 import os
+import numpy as np
 from PIL import Image
 from torch.utils.data import Dataset
 from sklearn.decomposition import NMF
+from utility import normalize_image
 
 class CRCTissueDataset(Dataset):
     def __init__(
         self,
         imgs_path,
+        normalizer,
+        norm_reference_path,
         transforms=None,
         class_map={
             "tumor" : 0,
@@ -63,6 +67,11 @@ class CRCTissueDataset(Dataset):
         class_id = self.class_map[class_name]
         # Loads an image from the given image_path
         img = Image.open(img_path)
+
+        if self.normalizer is not None:
+            ref_img = Image.open(self.norm_reference_path)
+            img = normalize_image(ref_img, img, self.normalizer)
+
         if self.transforms:
             img = self.transforms(img)
 
