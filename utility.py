@@ -1,11 +1,21 @@
 from tqdm import tqdm
 import torch
 from metrics import get_metrics
+import numpy as np
+import staintools
 
-from tqdm import tqdm
-import torch
-# Torch imports
-from metrics import get_metrics
+def normalize_image(ref_img, tar_img, normalizer):
+    tar_img = tar_img.convert("RGB")
+    ref_img = ref_img.convert("RGB")
+    tar_img = np.array(tar_img)
+    ref_img = np.array(ref_img)
+    tar_img = tar_img.astype(np.uint8)
+    ref_img = ref_img.astype(np.uint8)
+
+    normalizer.fit(ref_img)
+    tar_img = normalizer.transform(tar_img)
+
+    return tar_img
 
 def run_epoch(dataloader,
               model,
