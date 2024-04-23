@@ -15,7 +15,7 @@ from model import CRCTissueClassifier
 from utility import run_epoch
 
 # Constants
-RUN_ID = "1"
+RUN_ID = "2"
 TRAIN_IMG_PATH = "./data-split/train"
 VAL_IMG_PATH = "./data-split/val"
 CKPT_PATH = os.path.join("./checkpoints/", RUN_ID)
@@ -31,7 +31,8 @@ batch_size = 16
 n_epochs = 40
 
 # Normalizer
-normalizer = staintools.StainNormalizer(method='vahadane')
+# normalizer = staintools.StainNormalizer(method='vahadane')
+normalizer = None
 
 # Trainset augmentation
 train_transforms = v2.Compose([
@@ -76,7 +77,8 @@ val_dataloader = DataLoader(val_dataset,
 device = torch.device('cuda') if torch.cuda.is_available() else torch.device('cpu')
 model = CRCTissueClassifier()
 loss_fn = nn.CrossEntropyLoss()
-opt = optim.SGD(model.parameters(), lr=lr, weight_decay=lmbda)
+# opt = optim.SGD(model.parameters(), lr=lr, weight_decay=lmbda)
+opt = optim.Adam(model.parameters(), lr=lr, weight_decay=lmbda)
 
 # Logging
 train_logger = SummaryWriter(log_dir=os.path.join(LOG_PATH, "train"))

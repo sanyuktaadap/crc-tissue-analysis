@@ -1,9 +1,7 @@
 import glob
 import os
-import numpy as np
 from PIL import Image
 from torch.utils.data import Dataset
-from sklearn.decomposition import NMF
 from utility import normalize_image
 
 class CRCTissueDataset(Dataset):

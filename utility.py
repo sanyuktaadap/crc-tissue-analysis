@@ -42,7 +42,7 @@ def run_epoch(dataloader,
 
         # Running forward propagation
         y_hat = model(x)
-
+        # Compute loss
         loss = loss_fn(y_hat, y)
 
         if opt is not None:
