@@ -14,8 +14,3 @@ Using Colorectal Cancer Histology images to identify the 8 types of tissue textu
 
 #### Train-Val-Test Scripts
 - [Training and Validation](./train.py)
-- [Testing](./test.py)
--
-
-Reference papers:
-1. https://www.nature.com/articles/s41598-019-50587-1
