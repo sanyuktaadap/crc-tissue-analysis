@@ -1,28 +1,27 @@
 import os
-import torch
-import staintools
 
 # Torch Imports
+import torch
 from torch.utils.data import DataLoader
 import torch.nn as nn
+from efficientnet_pytorch import EfficientNet
 import torch.optim as optim
 from torchvision.transforms import v2
 from torch.utils.tensorboard import SummaryWriter
 
 # Local Imports
 from dataset import CRCTissueDataset
-from model import CRCTissueClassifier
+# from model import CRCTissueClassifier
 from utility import run_epoch
 
 # Constants
-RUN_ID = "2"
+RUN_ID = "5"
 TRAIN_IMG_PATH = "./data-split/train"
 VAL_IMG_PATH = "./data-split/val"
 CKPT_PATH = os.path.join("./checkpoints/", RUN_ID)
 LOG_PATH = os.path.join("./logs", RUN_ID)
-IMG_SIZE = (227, 227)
+IMG_SIZE = (512, 512)
 N_CLASSES = 8
-REF_IMG_PATH = "./data-split/train/06_MUCOSA/1A62_CRC-Prim-HE-05.tif_Row_1201_Col_1501.tif"
 
 # Hyperparams
 lr = 1e-4
@@ -32,7 +31,6 @@ n_epochs = 40
 
 # Normalizer
 # normalizer = staintools.StainNormalizer(method='vahadane')
-normalizer = None
 
 # Trainset augmentation
 train_transforms = v2.Compose([
@@ -48,8 +46,6 @@ train_transforms = v2.Compose([
 # Load train data
 train_dataset = CRCTissueDataset(
     imgs_path=TRAIN_IMG_PATH,
-    normalizer=normalizer,
-    norm_reference_path=REF_IMG_PATH,
     transforms=train_transforms)
 train_dataloader = DataLoader(train_dataset,
                               batch_size=batch_size,
@@ -65,8 +61,6 @@ val_transforms = v2.Compose([
 # Load validation data
 val_dataset = CRCTissueDataset(
     imgs_path=VAL_IMG_PATH,
-    normalizer=normalizer,
-    norm_reference_path=REF_IMG_PATH,
     transforms=val_transforms)
 val_dataloader = DataLoader(val_dataset,
                             batch_size=batch_size,
@@ -75,9 +69,9 @@ val_dataloader = DataLoader(val_dataset,
 
 # Other hyperparameters
 device = torch.device('cuda') if torch.cuda.is_available() else torch.device('cpu')
-model = CRCTissueClassifier()
+# model = CRCTissueClassifier()
+model = EfficientNet.from_pretrained('efficientnet-b7', num_classes=8)
 loss_fn = nn.CrossEntropyLoss()
-# opt = optim.SGD(model.parameters(), lr=lr, weight_decay=lmbda)
 opt = optim.Adam(model.parameters(), lr=lr, weight_decay=lmbda)
 
 # Logging

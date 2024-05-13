@@ -1,6 +1,7 @@
 import torch.nn as nn
 import torch.nn.functional as F
 import torch.hub as hub
+from efficientnet_pytorch import EfficientNet
 
 class CRCTissueClassifier(nn.Module):
     def __init__(self, n_classes=8,  dropout=0.2):
@@ -8,7 +9,7 @@ class CRCTissueClassifier(nn.Module):
         self.n_classes = n_classes
         self.dropout = dropout
 
-        # Load AlexNet from Torch
+        # Load ResNet18 from Torch
         resnet = hub.load('pytorch/vision:v0.10.0', 'resnet18', pretrained=True)
         modules = list(resnet.children())[:-1]
         self.resnet = nn.Sequential(*modules)

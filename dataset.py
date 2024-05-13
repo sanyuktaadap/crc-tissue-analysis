@@ -8,8 +8,8 @@ class CRCTissueDataset(Dataset):
     def __init__(
         self,
         imgs_path,
-        normalizer,
-        norm_reference_path,
+        normalizer=None,
+        norm_reference_path=None,
         transforms=None,
         class_map={
             "tumor" : 0,
