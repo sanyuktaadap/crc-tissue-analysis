@@ -1,7 +1,5 @@
 import torch.nn as nn
-import torch.nn.functional as F
 import torch.hub as hub
-from efficientnet_pytorch import EfficientNet
 
 class CRCTissueClassifier(nn.Module):
     def __init__(self, n_classes=8,  dropout=0.2):
